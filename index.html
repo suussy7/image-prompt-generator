@@ -1,222 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image to Prompt Generator</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Image to Prompt Generator</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-<body data-color-scheme="dark">
-    <div class="app-container">
-        <!-- Header -->
-        <header class="app-header">
-            <div class="header-content">
-                <h1 class="app-title">Image to Prompt Generator</h1>
-                <div class="mode-selector">
-                    <button class="mode-btn active" data-mode="Basic">Basic</button>
-                    <button class="mode-btn" data-mode="Detailed">Detailed</button>
-                    <button class="mode-btn" data-mode="Technical">Technical</button>
-                    <button class="mode-btn" data-mode="Creative">Creative</button>
-                </div>
-            </div>
-        </header>
-
-        <!-- Main Content -->
-        <main class="app-main">
-            <!-- Left Panel - Image Upload and Display -->
-            <div class="left-panel">
-                <div class="upload-section">
-                    <div class="upload-area" id="uploadArea">
-                        <div class="upload-content">
-                            <div class="upload-icon">📷</div>
-                            <h3>Upload Your Image</h3>
-                            <p>Drag and drop an image here or click to browse</p>
-                            <button class="btn btn--primary" id="browseBtn">Browse Files</button>
-                            <input type="file" id="fileInput" accept="image/*" hidden="">
-                        </div>
-                    </div>
-                    
-                    <div class="image-display hidden" id="imageDisplay">
-                        <img id="uploadedImage" alt="Uploaded image">
-                        <div class="image-controls">
-                            <button class="btn btn--sm btn--outline" id="clearImageBtn">Clear Image</button>
-                            <button class="btn btn--sm btn--secondary" id="zoomBtn">Zoom</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Sample Images -->
-                <div class="sample-section">
-                    <h4>Try Sample Images</h4>
-                    <div class="sample-grid">
-                        <div class="sample-item" data-sample="portrait">
-                            <div class="sample-placeholder">👤</div>
-                            <span>Portrait</span>
-                        </div>
-                        <div class="sample-item" data-sample="product">
-                            <div class="sample-placeholder">⌚</div>
-                            <span>Product</span>
-                        </div>
-                        <div class="sample-item" data-sample="landscape">
-                            <div class="sample-placeholder">🏔️</div>
-                            <span>Landscape</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Panel - Prompt Generation -->
-            <div class="right-panel">
-                <!-- Analysis Categories -->
-                <div class="analysis-section">
-                    <h3>Analysis Categories</h3>
-                    <div class="category-grid">
-                        <div class="category-card" data-category="subject">
-                            <div class="category-header">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked="">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <h4>Subject &amp; Composition</h4>
-                            </div>
-                            <p>Main subject, framing, composition rules</p>
-                        </div>
-
-                        <div class="category-card" data-category="lighting">
-                            <div class="category-header">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked="">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <h4>Lighting &amp; Atmosphere</h4>
-                            </div>
-                            <p>Light source, shadows, mood, color temperature</p>
-                        </div>
-
-                        <div class="category-card" data-category="style">
-                            <div class="category-header">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked="">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <h4>Style &amp; Technique</h4>
-                            </div>
-                            <p>Art style, medium, genre, artistic influences</p>
-                        </div>
-
-                        <div class="category-card" data-category="technical">
-                            <div class="category-header">
-                                <label class="toggle-switch">
-                                    <input type="checkbox">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <h4>Technical Details</h4>
-                            </div>
-                            <p>Depth of field, perspective, camera settings</p>
-                        </div>
-
-                        <div class="category-card" data-category="color">
-                            <div class="category-header">
-                                <label class="toggle-switch">
-                                    <input type="checkbox" checked="">
-                                    <span class="toggle-slider"></span>
-                                </label>
-                                <h4>Color &amp; Materials</h4>
-                            </div>
-                            <p>Color palette, materials, textures, surfaces</p>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Prompt Controls -->
-                <div class="controls-section">
-                    <div class="control-group">
-                        <label class="form-label">Prompt Length</label>
-                        <select id="promptLength" class="form-control">
-                            <option value="Short">Short</option>
-                            <option value="Medium" selected="">Medium</option>
-                            <option value="Long">Long</option>
-                            <option value="Ultra-detailed">Ultra-detailed</option>
-                        </select>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="form-label">Output Format</label>
-                        <select id="outputFormat" class="form-control">
-                            <option value="Generic" selected="">Generic</option>
-                            <option value="Midjourney">Midjourney</option>
-                            <option value="DALL-E">DALL-E</option>
-                            <option value="Stable Diffusion">Stable Diffusion</option>
-                        </select>
-                    </div>
-
-                    <div class="control-group">
-                        <label class="toggle-switch">
-                            <input type="checkbox" id="negativePrompt">
-                            <span class="toggle-slider"></span>
-                        </label>
-                        <label class="form-label">Generate Negative Prompt</label>
-                    </div>
-                </div>
-
-                <!-- Generated Prompt -->
-                <div class="prompt-section">
-                    <div class="prompt-header">
-                        <h3>Generated Prompt</h3>
-                        <div class="prompt-actions">
-                            <button class="btn btn--sm btn--outline" id="copyBtn">📋 Copy</button>
-                            <button class="btn btn--sm btn--secondary" id="exportBtn">💾 Export</button>
-                        </div>
-                    </div>
-                    
-                    <div class="prompt-output">
-                        <div class="prompt-content" id="promptContent">
-                            <p class="placeholder-text">Upload an image or select a sample to generate a detailed prompt description.</p>
-                        </div>
-                        
-                        <div class="negative-prompt-content hidden" id="negativePromptContent">
-                            <h4>Negative Prompt:</h4>
-                            <p id="negativePromptText"></p>
-                        </div>
-                    </div>
-
-                    <div class="prompt-stats">
-                        <span id="wordCount">0 words</span>
-                        <span id="charCount">0 characters</span>
-                    </div>
-                </div>
-
-                <!-- Analysis Status -->
-                <div class="status-section">
-                    <div class="analysis-progress hidden" id="analysisProgress">
-                        <div class="progress-bar">
-                            <div class="progress-fill"></div>
-                        </div>
-                        <p>Analyzing image...</p>
-                    </div>
-                    
-                    <div class="analysis-complete hidden" id="analysisComplete">
-                        <div class="status status--success">✓ Analysis Complete</div>
-                    </div>
-                </div>
-            </div>
-        </main>
+<body>
+  <div class="container">
+    <div class="analysis-categories">
+      <h2>Analysis Categories</h2>
+      <!-- Optionally, just hide this with CSS if not needed -->
+      <div class="category-card">Subject & Composition</div>
+      <div class="category-card">Lighting & Atmosphere</div>
+      <div class="category-card">Style & Technique</div>
+      <div class="category-card">Technical Details</div>
+      <div class="category-card">Color & Materials</div>
     </div>
-
-    <!-- Image Zoom Modal -->
-    <div class="modal hidden" id="zoomModal">
-        <div class="modal-backdrop" id="modalBackdrop"></div>
-        <div class="modal-content">
-            <div class="modal-header">
-                <h3>Image Preview</h3>
-                <button class="modal-close" id="modalClose">×</button>
-            </div>
-            <div class="modal-body">
-                <img id="zoomedImage" alt="Zoomed image">
-            </div>
+    <div class="main-content">
+      <div id="uploadArea" class="upload-area">
+        <button id="browseBtn">Browse Files</button>
+        <input type="file" id="fileInput" accept="image/*" style="display: none;">
+        <div class="upload-instruction">Or paste / drag and drop an image here</div>
+      </div>
+      <div id="imageDisplay" class="image-display hidden">
+        <img id="uploadedImage" src="" alt="Uploaded Image" />
+        <button id="clearImageBtn">Remove Image</button>
+      </div>
+      <div id="analysisProgress" class="progress-panel hidden">
+        <div class="progress-bar">
+          <div class="progress-fill"></div>
         </div>
+        <div class="progress-text">Analyzing image...</div>
+      </div>
+      <div id="analysisComplete" class="hidden">
+        <span>Analysis complete!</span>
+      </div>
+      <div class="prompt-section">
+        <h3>AI Prompt</h3>
+        <div id="promptContent" class="prompt-box">Upload or paste an image to generate your prompt</div>
+        <div class="prompt-actions">
+          <button id="copyBtn">Copy Prompt</button>
+        </div>
+      </div>
     </div>
-
-    <script src="app.js"></script>
+  </div>
+  <script src="app.js"></script>
 </body>
 </html>
