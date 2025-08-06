@@ -80,6 +80,23 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeApp();
 });
 
+// --- Paste support for images from clipboard ---
+document.addEventListener('paste', function (event) {
+  if (event.clipboardData && event.clipboardData.items) {
+    for (let i = 0; i < event.clipboardData.items.length; i++) {
+      let item = event.clipboardData.items[i];
+      if (item.kind === 'file' && item.type.startsWith('image/')) {
+        const file = item.getAsFile();
+        if (file) {
+          loadImage(file);
+          event.preventDefault();
+          break;
+        }
+      }
+    }
+  }
+});
+
 function initializeApp() {
   // Initialize category states
   appData.analysisCategories.forEach(category => {
@@ -115,7 +132,7 @@ function setupEventListeners() {
     });
   });
 
-  // Category toggles - Fixed event handling
+  // Category toggles
   document.querySelectorAll('.category-card').forEach((card, index) => {
     const checkbox = card.querySelector('input[type="checkbox"]');
     const categoryName = appData.analysisCategories[index].name;
@@ -369,9 +386,9 @@ function buildPromptFromCategories(enabledCategories) {
   let promptParts = [];
   
   // Base prompt varies by image type
-  const imageType = currentState.currentImage.includes('sample-portrait') ? 'portrait' :
-                   currentState.currentImage.includes('sample-product') ? 'product' :
-                   currentState.currentImage.includes('sample-landscape') ? 'landscape' : 'general';
+  const imageType = currentState.currentImage && typeof currentState.currentImage === 'string' && currentState.currentImage.includes('sample-portrait') ? 'portrait' :
+                   currentState.currentImage && typeof currentState.currentImage === 'string' && currentState.currentImage.includes('sample-product') ? 'product' :
+                   currentState.currentImage && typeof currentState.currentImage === 'string' && currentState.currentImage.includes('sample-landscape') ? 'landscape' : 'general';
   
   if (enabledCategories.includes('Subject & Composition')) {
     switch (imageType) {
